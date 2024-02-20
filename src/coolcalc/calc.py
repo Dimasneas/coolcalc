@@ -104,7 +104,6 @@ def normalize(expr: str) -> Tuple[str, str]:
             expr = expr[3:]
         expr = expr.replace(n_sys, '')
 
-    print(f"системы счисления: {expr}")
     # Добавление знаков и скобок к функциям
     result_expr = ''
     for func in MATH_FUNCTIONS:
@@ -126,7 +125,6 @@ def normalize(expr: str) -> Tuple[str, str]:
     if result_expr:
         expr = result_expr
 
-    print(f"знаки и функции: {expr}")
     # Добавление к открывающимся скобкам знаков умножения
     result_expr = ""
     parts = expr.split('(')
@@ -142,11 +140,11 @@ def normalize(expr: str) -> Tuple[str, str]:
         prev_part = cur
     if result_expr:
         expr = result_expr + cur
-    print(f"скобки: {expr}")
+
     # Закрытие всех скобок
     while expr.count("(") > expr.count(")"):
         expr += ")"
-    print(f"закрытие скобок: {expr}")
+
     # Добавление к закрывающимся скобкам 0 и знаков умножения
     result_expr = ""
     parts = expr.split(')')
@@ -162,7 +160,7 @@ def normalize(expr: str) -> Tuple[str, str]:
         prev_part = cur
     if result_expr:
         expr = result_expr + cur
-    print(f"обработ скобки: {expr}")
+
     # Удаление цепочек знаков
     result_expr = ""
     pattern = fr'[{"".join(re.escape(sym) for sym in MATH_SIGNS)}]+'
@@ -175,12 +173,10 @@ def normalize(expr: str) -> Tuple[str, str]:
         copy = copy[i + 1:]
     if result_expr:
         expr = result_expr + copy
-    print(f"знаки: {expr}")
+
     # Добавление 0 в начало, если там нет цифры
     if expr and expr[0] in MATH_SIGNS:
         expr = "0" + expr
-
-    print(f"Нормализованное: {expr}")
 
     return expr, num_sys
 
@@ -227,12 +223,9 @@ def calculate(expr: str) -> str:
     """
     if not expr:
         return ''
-    print("calc: " + expr)
 
     expr, num_sys = normalize(expr)
     expr = replace_math(expr)
-
-    print(expr)
 
     try:
         result = eval(expr)
