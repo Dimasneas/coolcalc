@@ -1,0 +1,83 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "coolcalc"
+dynamic = ["version"]
+description = 'Study project packet calculator'
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+keywords = []
+authors = [
+  { name = "Dimasneas", email = "dima@dglushenkov.ru" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = []
+
+[project.urls]
+Documentation = "https://github.com/unknown/coolcalc#readme"
+Issues = "https://github.com/unknown/coolcalc/issues"
+Source = "https://github.com/unknown/coolcalc"
+
+[tool.hatch.version]
+path = "src/coolcalc/__about__.py"
+
+[tool.hatch.envs.default]
+dependencies = [
+  "coverage[toml]>=6.5",
+  "pytest",
+]
+[tool.hatch.envs.default.scripts]
+test = "pytest {args:tests}"
+test-cov = "coverage run -m pytest {args:tests}"
+cov-report = [
+  "- coverage combine",
+  "coverage report",
+]
+cov = [
+  "test-cov",
+  "cov-report",
+]
+
+[[tool.hatch.envs.all.matrix]]
+python = ["3.10", "3.11", "3.12"]
+
+[tool.hatch.envs.types]
+dependencies = [
+  "mypy>=1.0.0",
+]
+[tool.hatch.envs.types.scripts]
+check = "mypy --install-types --non-interactive {args:src/coolcalc tests}"
+
+[tool.coverage.run]
+source_pkgs = ["coolcalc", "tests"]
+branch = true
+parallel = true
+omit = [
+  "src/coolcalc/__about__.py",
+]
+
+[tool.coverage.paths]
+coolcalc = ["src/coolcalc", "*/coolcalc/src/coolcalc"]
+tests = ["tests", "*/coolcalc/tests"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+  "README.md",
+  "*git*",
+]
